@@ -1,1 +1,0 @@
-int j=i+1;j<=i+count;j++
