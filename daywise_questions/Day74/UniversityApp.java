@@ -117,53 +117,142 @@ public class UniversityApp {
     }
 }
 
-// TODO: Define the Printable interface with one method: void printDetails()
+// Define the Printable interface with one method: void printDetails()
 interface Printable {
     // void printDetails();
+    void printDetails();
+
 }
 
 
-// TODO: Implement class Course with fields: code, title, credits
+// Implement class Course with fields: code, title, credits
 // Add constructor and override toString() to return "code - title"
 class Course {
-    // TODO: Declare fields and constructor
-    // TODO: Override toString()
+    // Declare fields and constructor
+    //  Override toString()
+    private String code;
+    private String title;
+    private int credits;
+    public Course(String code, String title, int credits) {
+        this.code = code;
+        this.title = title;
+        this.credits = credits;
+    }
+    @Override
+    public String toString() {
+        return code + " - " + title;
+    }
 }
 
-// TODO: Create abstract class Student implementing Printable
+// Create abstract class Student implementing Printable
 // Include: name, id, list of courses, abstract int getMaxCourses()
 // Method: registerCourse(Course) throws CourseLimitExceededException
 // Override toString() to return "name (id)"
 // Implement printDetails()
 abstract class Student implements Printable {
-    // TODO: Define fields, constructor, and methods as per the spec
+    protected String name;
+    protected int id;
+    protected List<Course> courses;
+    public Student(String name, int id) {
+        this.name = name;
+        this.id = id;
+        this.courses = new ArrayList<>();
+    }
+    public abstract int getMaxCourses();
+    public void registerCourse(Course course) throws CourseLimitExceededException {
+        if (courses.size() >= getMaxCourses()) {
+            throw new CourseLimitExceededException(name + " cannot register for more than " + getMaxCourses() + " courses.");
+        }
+        courses.add(course);
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + id + ")";
+    }
+    @Override
+    public void printDetails() {
+        System.out.println(this);
+        if (courses.isEmpty()) {
+            System.out.println("  No courses registered.");
+        } else {
+            for (Course course : courses) {
+                System.out.println("  Registered: " + course);
+            }
+        }
+    }
+
 }
 
-// TODO: Implement Undergraduate class extending Student
+//  Implement Undergraduate class extending Student
 // getMaxCourses() should return 3
 class Undergraduate extends Student {
-    // TODO
+    public Undergraduate(String name, int id) {
+        super(name, id);
+    }  
+    @Override
+    public int getMaxCourses() {
+        return 3;
+    }
+
 }
 
-// TODO: Implement Postgraduate class extending Student
+// Implement Postgraduate class extending Student
 // getMaxCourses() should return 2
 class Postgraduate extends Student {
-    // TODO
+    public Postgraduate(String name, int id) {
+        super(name, id);
+    }
+
+    @Override
+    public int getMaxCourses() {
+        return 2;
+    }
 }
 
-// TODO: Define custom exception class CourseLimitExceededException
+// Define custom exception class CourseLimitExceededException
 class CourseLimitExceededException extends Exception {
-    // TODO: Constructor accepting message
+    // Constructor accepting message
+    public CourseLimitExceededException(String message) {
+        super(message);
+    }
+
 }
 
-// TODO: Implement Comparator<Student> to sort by student name
+// Implement Comparator<Student> to sort by student name
 class StudentNameComparator implements Comparator<Student> {
-    // TODO: Implement compare method
+    @Override
+    public int compare(Student s1, Student s2) {
+        return s1.name.compareToIgnoreCase(s2.name);
+    }
 }
 
-// TODO: Implement University class implementing Printable
+// Implement University class implementing Printable
 // Fields: name, list of students
 // Methods: addStudent, printAllStudents, printSortedStudentsByName
 class University implements Printable {
-    // TODO
+    String name;
+    List<Student> students;
+    public University(String name) {
+        this.name = name;
+        this.students = new ArrayList<>();
+    }
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+    @Override
+    public void printDetails() {
+        System.out.println("University: " + name);
+    }
+    public void printAllStudents() {
+        for (Student student : students) {
+            student.printDetails();
+        }
+    }
+    public void printSortedStudentsByName() {
+        Collections.sort(students, new StudentNameComparator());
+        for (Student student : students) {
+            student.printDetails();
+        }
+    }
 }

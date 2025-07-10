@@ -139,7 +139,7 @@ Sample Output-2:
          update(1, 1, n, day);
      }
  }
- 
+
  public class p3 {
      public static void main(String[] args) {
          Scanner sc = new Scanner(System.in);
